@@ -12,3 +12,6 @@ lint-fix:
 
 gendiff:
 	./bin/gendiff
+
+test-coverage:
+	composer exec --verbose phpunit tests -- --coverage-clover build/logs/clover.xml

@@ -1,0 +1,14 @@
+name: PHPCS
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: validate composer
+        run: make validate
+      - name: install composer
+        run: make install
+      - name: lint project
+        run: make lint
