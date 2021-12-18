@@ -22,16 +22,4 @@ class genDiffTest extends TestCase
         DOC;
         $this->assertSame($resultString, genDiff($beforePath, $afterPath, 'json'));
     }
-
-    public function testEmptyJsonDiff()
-    {
-        $beforePath = '';
-        $afterPath = '';
-        $resultString = <<<DOC
-        {
-        
-        }
-        DOC;
-        $this->assertSame($resultString, genDiff($beforePath, $afterPath, 'json'));
-    }
 }
