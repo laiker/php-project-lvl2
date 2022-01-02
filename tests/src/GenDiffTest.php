@@ -164,6 +164,7 @@ class GenDiffTest extends TestCase
             }
         }
         DOC;
+        
         $this->assertSame($resultString, genDiff($beforePath, $afterPath));
     }
 
