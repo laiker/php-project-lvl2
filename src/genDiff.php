@@ -58,12 +58,14 @@ function diff($objectFirst, $objectSecond)
             }
         }
 
-        foreach ($objectSecond as $keySecond => $valueSecond) {
-            if (!\property_exists($objectFirst, $keySecond)) {
-                if (is_object($valueSecond)) {
-                    $arDiff[$keySecond]['new'] = $iter($objectSecond->{$keySecond}, $valueSecond);
-                } else {
-                    $arDiff[$keySecond]['new'] = sanitizeValue($valueSecond);
+        if (is_object($objectSecond)) {
+            foreach ($objectSecond as $keySecond => $valueSecond) {
+                if (!\property_exists($objectFirst, $keySecond)) {
+                    if (is_object($valueSecond)) {
+                        $arDiff[$keySecond]['new'] = $iter($objectSecond->{$keySecond}, $valueSecond);
+                    } else {
+                        $arDiff[$keySecond]['new'] = sanitizeValue($valueSecond);
+                    }
                 }
             }
         }

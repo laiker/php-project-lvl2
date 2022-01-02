@@ -23,7 +23,7 @@
     "prefer-stable": true,
     "require": {
         "docopt/docopt": "^1.0.4",
-        "lstrojny/functional-php": "dev-main",
+        "lstrojny/functional-php": "^1.17.0",
         "symfony/yaml": "^5.4.x-dev"
     },
     "scripts": {
