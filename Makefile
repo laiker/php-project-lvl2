@@ -7,6 +7,9 @@ console:
 lint:
 	composer exec --verbose phpcs -- --standard=PSR12 src tests
 
+validation:
+	composer validate
+
 lint-fix:
 	composer exec --verbose phpcbf -- --standard=PSR12 src tests
 
