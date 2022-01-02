@@ -32,6 +32,6 @@ foreach ($args as $k => $v) {
     //echo $k.': '.json_encode($v).PHP_EOL;
 }
 
-if ($args['--format'] == 'json' && $args['<firstFile>'] && $args['<secondFile>']) {
+if ($args['<firstFile>'] && $args['<secondFile>']) {
     var_dump(genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']));
 }
