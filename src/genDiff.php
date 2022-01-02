@@ -63,7 +63,7 @@ function diff($objectFirst, $objectSecond)
 
         if (\is_object($objectSecond)) {
             foreach ($objectSecond as $keySecond => $valueSecond) {
-                if (!\property_exists($objectFirst, $keySecond)) {
+                if (is_object($objectFirst) && !\property_exists($objectFirst, $keySecond)) {
                     if (is_object($valueSecond)) {
                         $arDiff[$keySecond]['new'] = $iter($objectSecond->{$keySecond}, $valueSecond);
                     } else {
@@ -154,23 +154,26 @@ function formatPlain($arDiff)
     $iter = function ($arDiff, &$arFormatDiff = [], $level = 1, $currentLevel = '') use (&$iter) {
 
         foreach ($arDiff as $key => $value) {
-            $noDiffValue = (\array_key_exists('old', $value) && \is_array($value['old']) && !\is_array($value['new']));
+            $hasOldValue = \array_key_exists('old', $value);
+            $hasNewValue = \array_key_exists('new', $value);
+
+            $noDiffValue = ($hasOldValue && \is_array($value['old']) && !\is_array($value['new']));
             $tempLevel = ($level == 1) ? $key : $currentLevel . '.' . $key;
 
-            if (\is_array($value['old']) && !$noDiffValue) {
+            if ($hasOldValue &&\is_array($value['old']) && !$noDiffValue) {
                 $valueOld = $iter($value['old'], $arFormatDiff, $level + 1, $tempLevel);
             } else {
                 $valueOld = sanitizeValuePlain($value['old']);
             }
 
-            if (\is_array($value['new']) && array_key_exists('old', $value)) {
+            if ($hasNewValue && \is_array($value['new']) && $hasOldValue) {
                 $valueNew = $iter($value['new'], $arFormatDiff, $level + 1, $tempLevel);
             } else {
                 $valueNew = sanitizeValuePlain($value['new']);
             }
 
             $formatString = '';
-            if (\array_key_exists('old', $value) && \array_key_exists('new', $value)) {
+            if ($hasOldValue && $hasNewValue) {
                 if ($valueOld != $valueNew) {
                     $formatString = "Property '" . $tempLevel . "' was updated. From " . $valueOld . " to " . $valueNew;
                 }
