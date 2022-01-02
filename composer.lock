@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "360af709f429889bad8fcf703f1feca0",
+    "content-hash": "1e4581bd3b7f1adc4d8730e3805a6b30",
     "packages": [
         {
             "name": "docopt/docopt",
-            "version": "dev-master",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/docopt/docopt.php.git",
-                "reference": "6f94df73bb11d06625f756d8647e5249cd88e2ae"
+                "reference": "bf3683a16e09fa1665e493eb4d5a29469e132a4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/docopt/docopt.php/zipball/6f94df73bb11d06625f756d8647e5249cd88e2ae",
-                "reference": "6f94df73bb11d06625f756d8647e5249cd88e2ae",
+                "url": "https://api.github.com/repos/docopt/docopt.php/zipball/bf3683a16e09fa1665e493eb4d5a29469e132a4f",
+                "reference": "bf3683a16e09fa1665e493eb4d5a29469e132a4f",
                 "shasum": ""
             },
             "require": {
@@ -26,7 +26,6 @@
             "require-dev": {
                 "phpunit/phpunit": "4.1.*"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -53,9 +52,9 @@
             ],
             "support": {
                 "issues": "https://github.com/docopt/docopt.php/issues",
-                "source": "https://github.com/docopt/docopt.php/tree/master"
+                "source": "https://github.com/docopt/docopt.php/tree/1.0.4"
             },
-            "time": "2019-12-03T03:10:08+00:00"
+            "time": "2019-12-03T02:48:46+00:00"
         },
         {
             "name": "lstrojny/functional-php",
@@ -2512,7 +2511,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "docopt/docopt": 20,
         "lstrojny/functional-php": 20,
         "symfony/yaml": 20
     },
