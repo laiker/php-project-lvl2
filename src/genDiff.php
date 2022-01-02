@@ -120,7 +120,7 @@ function formatDefault($arDiff)
                     $arFormatDiff[] = str_repeat('  ', $level) .  ' ' . ' ' . $key . ': ' . $valueNew;
                 }
             } else {
-                if ($value['old']) {
+                if ($hasOldValue) {
                     $arFormatDiff[] = str_repeat('  ', $level) .  $diff . ' ' . $key . ': ' . $valueOld;
                 } else {
                     $arFormatDiff[] = str_repeat('  ', $level) .  '+' . ' ' . $key . ': ' . $valueNew;
