@@ -1,6 +1,6 @@
 <?php
 
-namespace Gendiff\Gendiff;
+namespace Differ\Differ;
 
 use stdClass;
 use Symfony\Component\Yaml\Yaml;
@@ -45,7 +45,7 @@ function diff($objectFirst, $objectSecond)
         if (\is_array($objectFirst) || \is_object($objectFirst)) {
             foreach ($objectFirst as $keyFirst => $valueFirst) {
                 if (is_object($valueFirst)) {
-                    $arDiff[$keyFirst]['old'] = $iter($valueFirst, $objectSecond->{$keyFirst});
+                    $arDiff[$keyFirst]['old'] = $iter($valueFirst, \property_exists($objectSecond, $keyFirst) ? $objectSecond->{$keyFirst} : '');
                 } else {
                     $arDiff[$keyFirst]['old'] = sanitizeValue($valueFirst);
                 }
