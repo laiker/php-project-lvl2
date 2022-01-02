@@ -41,11 +41,12 @@ function diff($objectFirst, $objectSecond)
     $iter = function ($objectFirst, $objectSecond) use (&$iter) {
 
         $arDiff = [];
-
-        if (\is_array($objectFirst) || \is_object($objectFirst)) {
+        
+        if (\is_object($objectFirst)) {
             foreach ($objectFirst as $keyFirst => $valueFirst) {
                 if (is_object($valueFirst)) {
-                    $arDiff[$keyFirst]['old'] = $iter($valueFirst, \property_exists($objectSecond, $keyFirst) ? $objectSecond->{$keyFirst} : '');
+                    $secondValue = (is_object($objectSecond) && \property_exists($objectSecond, $keyFirst)) ? $objectSecond->{$keyFirst} : '';
+                    $arDiff[$keyFirst]['old'] = $iter($valueFirst, $secondValue);
                 } else {
                     $arDiff[$keyFirst]['old'] = sanitizeValue($valueFirst);
                 }
@@ -60,7 +61,7 @@ function diff($objectFirst, $objectSecond)
             }
         }
 
-        if (\is_array($objectSecond) || \is_object($objectSecond)) {
+        if (\is_object($objectSecond)) {
             foreach ($objectSecond as $keySecond => $valueSecond) {
                 if (!\property_exists($objectFirst, $keySecond)) {
                     if (is_object($valueSecond)) {
@@ -97,7 +98,7 @@ function formatDefault($arDiff)
             $hasNewValue = \array_key_exists('new', $value);
 
             if ($hasOldValue) {
-                if (\is_array($value['old']) && !\is_array($value['new'])) {
+                if (\is_array($value['old']) && (!$hasNewValue || !\is_array($value['new']))) {
                     $noDiffValue = true;
                 }
             }
