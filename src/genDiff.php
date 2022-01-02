@@ -63,8 +63,8 @@ function diff($objectFirst, $objectSecond)
 
         if (\is_object($objectSecond)) {
             foreach ($objectSecond as $keySecond => $valueSecond) {
-                if (is_object($objectFirst) && !\property_exists($objectFirst, $keySecond)) {
-                    if (is_object($valueSecond)) {
+                if (!\property_exists($objectFirst, $keySecond)) {
+                    if (\is_object($valueSecond)) {
                         $arDiff[$keySecond]['new'] = $iter($objectSecond->{$keySecond}, $valueSecond);
                     } else {
                         $arDiff[$keySecond]['new'] = sanitizeValue($valueSecond);
@@ -90,7 +90,7 @@ function formatDefault($arDiff)
         $diffString = '{' . PHP_EOL;
 
         $arFormatDiff = [];
-
+        
         foreach ($arDiff as $key => $value) {
             $noDiffValue = false;
 
@@ -160,10 +160,12 @@ function formatPlain($arDiff)
             $noDiffValue = ($hasOldValue && \is_array($value['old']) && !\is_array($value['new']));
             $tempLevel = ($level == 1) ? $key : $currentLevel . '.' . $key;
 
-            if ($hasOldValue &&\is_array($value['old']) && !$noDiffValue) {
-                $valueOld = $iter($value['old'], $arFormatDiff, $level + 1, $tempLevel);
-            } else {
-                $valueOld = sanitizeValuePlain($value['old']);
+            if ($hasOldValue) {
+                if (\is_array($value['old']) && !$noDiffValue) {
+                    $valueOld = $iter($value['old'], $arFormatDiff, $level + 1, $tempLevel);
+                } else {
+                    $valueOld = sanitizeValuePlain($value['old']);
+                }
             }
 
             if ($hasNewValue && \is_array($value['new']) && $hasOldValue) {
