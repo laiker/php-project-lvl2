@@ -41,11 +41,11 @@ function diff($objectFirst, $objectSecond)
     $iter = function ($objectFirst, $objectSecond) use (&$iter) {
 
         $arDiff = [];
-        
         if (\is_object($objectFirst)) {
             foreach ($objectFirst as $keyFirst => $valueFirst) {
                 if (is_object($valueFirst)) {
-                    $secondValue = (is_object($objectSecond) && \property_exists($objectSecond, $keyFirst)) ? $objectSecond->{$keyFirst} : '';
+                    $secondValue = (is_object($objectSecond) && \property_exists($objectSecond, $keyFirst)) ?
+                        $objectSecond->{$keyFirst} : '';
                     $arDiff[$keyFirst]['old'] = $iter($valueFirst, $secondValue);
                 } else {
                     $arDiff[$keyFirst]['old'] = sanitizeValue($valueFirst);
@@ -154,7 +154,7 @@ function formatPlain($arDiff)
     $iter = function ($arDiff, &$arFormatDiff = [], $level = 1, $currentLevel = '') use (&$iter) {
 
         foreach ($arDiff as $key => $value) {
-            $noDiffValue = (\is_array($value['old']) && !\is_array($value['new']));
+            $noDiffValue = (\array_key_exists('old', $value) && \is_array($value['old']) && !\is_array($value['new']));
             $tempLevel = ($level == 1) ? $key : $currentLevel . '.' . $key;
 
             if (\is_array($value['old']) && !$noDiffValue) {
