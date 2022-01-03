@@ -182,7 +182,7 @@ function formatPlain($arDiff)
                     $formatString = "Property '" . $tempLevel . "' was updated. From " . $valueOld . " to " . $valueNew;
                 }
             } else {
-                if ($value['old']) {
+                if (isset($value['old'])) {
                     $formatString = "Property '" . $tempLevel . "' was removed";
                 } else {
                     $formatString = "Property '" . $tempLevel . "' was added with value: " . $valueNew;
