@@ -169,18 +169,18 @@ function formatPlain($arDiff)
                 }
             }
 
-            if ($hasNewValue && \is_array($value['new']) && $hasOldValue) {
-                $valueNew = $iter($value['new'], $arFormatDiff, $level + 1, $tempLevel);
-            } else {
-                $valueNew = isset($value['new']) ? sanitizeValuePlain($value['new']) : '';
+            if ($hasNewValue) {
+                if (\is_array($value['new']) && \is_array($value['old'])) {
+                    $valueNew = $iter($value['new'], $arFormatDiff, $level + 1, $tempLevel);
+                } else {
+                    $valueNew = isset($value['new']) ? sanitizeValuePlain($value['new']) : '';
+                }
             }
 
             $formatString = '';
             if ($hasOldValue && $hasNewValue) {
                 if ($valueOld != $valueNew) {
-                    $formatString = "Property '" . $tempLevel . "' was updated. From " 
-                    . $valueOld . " to 
-                    " . $valueNew;
+                    $formatString = "Property '" . $tempLevel . "' was updated. From " . $valueOld . " to " . $valueNew;
                 }
             } else {
                 if (isset($value['old'])) {
