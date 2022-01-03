@@ -126,7 +126,7 @@ class GenDiffTest extends TestCase
               - setting2: 200
               - setting3: true
               + setting3: {
-                  + key: value
+                    key: value
                 }
               + setting4: blah blah
               + setting5: {

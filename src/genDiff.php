@@ -98,18 +98,22 @@ function formatDefault($arDiff)
             $hasOldValue = \array_key_exists('old', $value);
             $hasNewValue = \array_key_exists('new', $value);
 
-            if ($hasOldValue) {
-                if (\is_array($value['old']) && (!$hasNewValue || !\is_array($value['new']))) {
-                    $noDiffValue = true;
-                }
+          
+            if ((\is_array($value['old']) && !\is_array($value['new'])) || (!\is_array($value['old']) && \is_array($value['new']))) {
+                $noDiffValue = true;
             }
+            
 
             if ($hasOldValue) {
                 $valueOld = \is_array($value['old']) ? $iter($value['old'], $level + 2, $noDiffValue) : $value['old'];
             }
 
             if ($hasNewValue) {
-                $valueNew = \is_array($value['new']) ? $iter($value['new'], $level + 2) : $value['new'];
+                if (!$hasOldValue) {
+                    $noDiffValue = true;
+                }
+                
+                $valueNew = \is_array($value['new']) ? $iter($value['new'], $level + 2, $noDiffValue) : $value['new'];
             }
 
             if ($diffParent) {
@@ -117,7 +121,7 @@ function formatDefault($arDiff)
             } else {
                 $diff = '-';
             }
-
+            
             if ($hasOldValue && $hasNewValue) {
                 if ($valueOld != $valueNew) {
                     $arFormatDiff[] = str_repeat('  ', $level) .  $diff . ' ' . $key . ': ' . $valueOld;
@@ -129,7 +133,12 @@ function formatDefault($arDiff)
                 if ($hasOldValue) {
                     $arFormatDiff[] = str_repeat('  ', $level) .  $diff . ' ' . $key . ': ' . $valueOld;
                 } else {
-                    $arFormatDiff[] = str_repeat('  ', $level) .  '+' . ' ' . $key . ': ' . $valueNew;
+                    if ($diffParent) {
+                        $diffPositive = ' ';
+                    } else {
+                        $diffPositive = '+';
+                    }
+                    $arFormatDiff[] = str_repeat('  ', $level) .  $diffPositive . ' ' . $key . ': ' . $valueNew;
                 }
             }
         }
