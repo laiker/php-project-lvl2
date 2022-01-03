@@ -13,6 +13,7 @@
             "src/genDiff.php"
         ]
     },
+    "bin": ["bin/gendiff"],
     "authors": [
         {
             "name": "Ruslan Demin",
