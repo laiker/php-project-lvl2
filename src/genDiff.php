@@ -178,7 +178,9 @@ function formatPlain($arDiff)
             $formatString = '';
             if ($hasOldValue && $hasNewValue) {
                 if ($valueOld != $valueNew) {
-                    $formatString = "Property '" . $tempLevel . "' was updated. From " . $valueOld . " to " . $valueNew;
+                    $formatString = "Property '" . $tempLevel . "' was updated. From " 
+                    . $valueOld . " to 
+                    " . $valueNew;
                 }
             } else {
                 if (isset($value['old'])) {
