@@ -62,6 +62,7 @@ function diff($objectFirst, $objectSecond)
         }
 
         if (\is_object($objectSecond)) {
+            $objectFirst = is_object($objectFirst) ? $objectFirst : new \stdClass;
             foreach ($objectSecond as $keySecond => $valueSecond) {
                 if (!\property_exists($objectFirst, $keySecond)) {
                     if (\is_object($valueSecond)) {
