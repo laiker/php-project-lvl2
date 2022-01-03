@@ -22,10 +22,10 @@ function genDiff(string $pathToFile1, string $pathToFile2, string $format = ''):
     return formatDefault($arDiff);
 }
 
-function getArrayEntity($pathToFile)
+function getArrayEntity(string $pathToFile)
 {
     $extension = pathinfo($pathToFile, PATHINFO_EXTENSION);
-    $fileRawData = \file_get_contents($pathToFile);
+    $fileRawData = (string)\file_get_contents($pathToFile);
     if ($extension == 'json') {
         return \json_decode($fileRawData);
     }
@@ -35,14 +35,13 @@ function getArrayEntity($pathToFile)
     }
 }
 
-function diff($objectFirst, $objectSecond)
+function diff(object $objectFirst, object $objectSecond)
 {
-
     $iter = function ($objectFirst, $objectSecond) use (&$iter) {
 
         $arDiff = [];
         if (\is_object($objectFirst)) {
-            foreach ($objectFirst as $keyFirst => $valueFirst) {
+            foreach ((array)$objectFirst as $keyFirst => $valueFirst) {
                 if (is_object($valueFirst)) {
                     $secondValue = (is_object($objectSecond) && \property_exists($objectSecond, $keyFirst)) ?
                         $objectSecond->{$keyFirst} : '';
@@ -63,7 +62,7 @@ function diff($objectFirst, $objectSecond)
 
         if (\is_object($objectSecond)) {
             $objectFirst = is_object($objectFirst) ? $objectFirst : new \stdClass();
-            foreach ($objectSecond as $keySecond => $valueSecond) {
+            foreach ((array)$objectSecond as $keySecond => $valueSecond) {
                 if (!\property_exists($objectFirst, $keySecond)) {
                     if (\is_object($valueSecond)) {
                         $arDiff[$keySecond]['new'] = $iter($objectSecond->{$keySecond}, $valueSecond);
@@ -84,7 +83,7 @@ function diff($objectFirst, $objectSecond)
     return $arData;
 }
 
-function formatDefault($arDiff)
+function formatDefault(array $arDiff)
 {
     $iter = function ($arDiff, $level, $diffParent = false) use (&$iter) {
 
@@ -150,7 +149,7 @@ function formatDefault($arDiff)
     return $iter($arDiff, 1, false);
 }
 
-function formatPlain($arDiff)
+function formatPlain(array $arDiff)
 {
 
     $iter = function ($arDiff, &$arFormatDiff = [], $level = 1, $currentLevel = '') use (&$iter) {
