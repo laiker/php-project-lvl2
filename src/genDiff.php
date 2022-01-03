@@ -63,7 +63,7 @@ function diff($objectFirst, $objectSecond)
 
         if (\is_object($objectSecond)) {
             foreach ($objectSecond as $keySecond => $valueSecond) {
-                if (!$objectFirst->{$keySecond}) {
+                if (!\property_exists($objectFirst, $keySecond)) {
                     if (\is_object($valueSecond)) {
                         $arDiff[$keySecond]['new'] = $iter($objectSecond->{$keySecond}, $valueSecond);
                     } else {
