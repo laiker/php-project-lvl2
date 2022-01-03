@@ -97,7 +97,7 @@ function formatDefault($arDiff)
 
             $hasOldValue = \array_key_exists('old', $value);
             $hasNewValue = \array_key_exists('new', $value);
-            
+
             if ($hasOldValue) {
                 $noDiffValue = \is_array($value['old']) && (!$hasNewValue || !\is_array($value['new']));
                 $valueOld = \is_array($value['old']) ? $iter($value['old'], $level + 2, $noDiffValue) : $value['old'];
@@ -113,7 +113,7 @@ function formatDefault($arDiff)
             } else {
                 $diff = '-';
             }
-            
+
             if ($hasOldValue && $hasNewValue) {
                 if ($valueOld != $valueNew) {
                     $arFormatDiff[] = str_repeat('  ', $level) .  $diff . ' ' . $key . ': ' . $valueOld;
