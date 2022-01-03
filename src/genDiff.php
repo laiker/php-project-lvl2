@@ -166,14 +166,14 @@ function formatPlain($arDiff)
                 if (\is_array($value['old']) && !$noDiffValue) {
                     $valueOld = $iter($value['old'], $arFormatDiff, $level + 1, $tempLevel);
                 } else {
-                    $valueOld = sanitizeValuePlain($value['old']);
+                    $valueOld = isset($value['old']) ? sanitizeValuePlain($value['old']) : '';
                 }
             }
 
             if ($hasNewValue && \is_array($value['new']) && $hasOldValue) {
                 $valueNew = $iter($value['new'], $arFormatDiff, $level + 1, $tempLevel);
             } else {
-                $valueNew = sanitizeValuePlain($value['new']);
+                $valueNew = isset($value['new']) ? sanitizeValuePlain($value['new']) : '';
             }
 
             $formatString = '';
