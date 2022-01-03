@@ -219,7 +219,7 @@ function sanitizeValuePlain($value)
 
     $value = \str_replace('"', '', $value);
 
-    if (in_array(trim($value), ['true', 'false', 'null'])) {
+    if (in_array(trim($value), ['true', 'false', 'null']) || is_numeric($value)) {
         return $value;
     }
 
