@@ -162,7 +162,7 @@ function formatPlain($arDiff)
             $tempLevel = ($level == 1) ? $key : $currentLevel . '.' . $key;
 
             if ($hasOldValue) {
-                if (\is_array($value['old']) && \is_array($value['new'])) {
+                if (\is_array($value['old']) && $hasNewValue && \is_array($value['new'])) {
                     $valueOld = $iter($value['old'], $arFormatDiff, $level + 1, $tempLevel);
                 } else {
                     $valueOld = isset($value['old']) ? sanitizeValuePlain($value['old']) : '';
@@ -170,7 +170,7 @@ function formatPlain($arDiff)
             }
 
             if ($hasNewValue) {
-                if (\is_array($value['new']) && \is_array($value['old'])) {
+                if (\is_array($value['new']) && $hasOldValue && \is_array($value['old'])) {
                     $valueNew = $iter($value['new'], $arFormatDiff, $level + 1, $tempLevel);
                 } else {
                     $valueNew = isset($value['new']) ? sanitizeValuePlain($value['new']) : '';
