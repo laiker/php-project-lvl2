@@ -159,11 +159,10 @@ function formatPlain($arDiff)
             $hasOldValue = \array_key_exists('old', $value);
             $hasNewValue = \array_key_exists('new', $value);
 
-            $noDiffValue = ($hasOldValue && \is_array($value['old']) && !\is_array($value['new']));
             $tempLevel = ($level == 1) ? $key : $currentLevel . '.' . $key;
 
             if ($hasOldValue) {
-                if (\is_array($value['old']) && !$noDiffValue) {
+                if (\is_array($value['old']) && \is_array($value['new'])) {
                     $valueOld = $iter($value['old'], $arFormatDiff, $level + 1, $tempLevel);
                 } else {
                     $valueOld = isset($value['old']) ? sanitizeValuePlain($value['old']) : '';
@@ -208,11 +207,6 @@ function sanitizeValue($value)
     }
 
     return \str_replace('"', '', \json_encode($value));
-}
-
-function toString($value)
-{
-    return trim(var_export(\json_encode($value), true), "'");
 }
 
 function sanitizeValuePlain($value)
