@@ -61,8 +61,7 @@ function getArrayEntity(string $pathToFile)
  */
 function diff(object $objectFirst, object $objectSecond): array
 {
-    $iter = function ($objectFirst, $objectSecond) use (&$iter)
-    {
+    $iter = function ($objectFirst, $objectSecond) use (&$iter) {
         $arDiff = [];
         if (\is_object($objectFirst)) {
             foreach ((array)$objectFirst as $keyFirst => $valueFirst) {
@@ -254,12 +253,12 @@ function sanitizeValue($value)
     if (is_object($value)) {
         return (array) $value;
     }
-    
+
     if ($value === null) {
         return 'null';
     }
 
-    return trim(var_export($value, true),'\'');
+    return trim(var_export($value, true), '\'');
 }
 
 /**
