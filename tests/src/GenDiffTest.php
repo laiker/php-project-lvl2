@@ -8,7 +8,7 @@ use function Differ\Differ\genDiff;
 
 class GenDiffTest extends TestCase
 {
-    public function testJsonDiff()
+    public function testJsonDiff(): void
     {
         $beforePath = 'tests/fixtures/before.json';
         $afterPath = 'tests/fixtures/after.json';
@@ -25,7 +25,7 @@ class GenDiffTest extends TestCase
         $this->assertSame($resultString, genDiff($beforePath, $afterPath));
     }
 
-    public function testYamlDiff()
+    public function testYamlDiff(): void
     {
         $beforePath = 'tests/fixtures/before.yml';
         $afterPath = 'tests/fixtures/after.yml';
@@ -42,7 +42,7 @@ class GenDiffTest extends TestCase
         $this->assertSame($resultString, genDiff($beforePath, $afterPath));
     }
 
-    public function testDifferentFormatsDiff()
+    public function testDifferentFormatsDiff(): void
     {
         $beforePath = 'tests/fixtures/before.json';
         $afterPath = 'tests/fixtures/after.yaml';
@@ -59,7 +59,7 @@ class GenDiffTest extends TestCase
         $this->assertSame($resultString, genDiff($beforePath, $afterPath));
     }
 
-    public function testRecursiveDiff()
+    public function testRecursiveDiff(): void
     {
 
         $beforePath = 'tests/fixtures/beforeRec.json';
@@ -113,7 +113,7 @@ class GenDiffTest extends TestCase
         $this->assertSame($resultString, genDiff($beforePath, $afterPath));
     }
 
-    public function testRecursiveDiff2()
+    public function testRecursiveDiff2(): void
     {
         $beforePath = 'tests/fixtures/before2.json';
         $afterPath = 'tests/fixtures/after2.json';
@@ -186,7 +186,7 @@ class GenDiffTest extends TestCase
         $this->assertSame($resultString, genDiff($beforePath, $afterPath));
     }
 
-    public function testRecursiveDiffYaml()
+    public function testRecursiveDiffYaml(): void
     {
 
         $beforePath = 'tests/fixtures/beforeRec.yaml';
@@ -240,7 +240,7 @@ class GenDiffTest extends TestCase
         $this->assertSame($resultString, genDiff($beforePath, $afterPath));
     }
 
-    public function testRecursiveDiffPlain()
+    public function testRecursiveDiffPlain(): void
     {
 
         $beforePath = 'tests/fixtures/beforeRec.json';
@@ -261,7 +261,7 @@ class GenDiffTest extends TestCase
         $this->assertSame($resultString, genDiff($beforePath, $afterPath, 'plain'));
     }
 
-    public function testRecursiveJson()
+    public function testRecursiveJson(): void
     {
 
         $beforePath = 'tests/fixtures/beforeRec.json';
@@ -270,7 +270,7 @@ class GenDiffTest extends TestCase
         $this->assertSame($resultString, genDiff($beforePath, $afterPath, 'json'));
     }
 
-    public function testRecursiveDiffPlain2()
+    public function testRecursiveDiffPlain2(): void
     {
         $beforePath = 'tests/fixtures/before2.json';
         $afterPath = 'tests/fixtures/after2.json';

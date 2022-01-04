@@ -5,7 +5,15 @@ namespace Differ\Differ;
 use stdClass;
 use Symfony\Component\Yaml\Yaml;
 
-function genDiff(string $pathToFile1, string $pathToFile2, string $format = ''): string
+/**
+ * genDiff
+ *
+ * @param  string $pathToFile1
+ * @param  string $pathToFile2
+ * @param  string $format
+ * @return string|false
+ */
+function genDiff(string $pathToFile1, string $pathToFile2, string $format = '')
 {
     $objectFirst = getArrayEntity($pathToFile1);
     $objectSecond = getArrayEntity($pathToFile2);
@@ -22,23 +30,39 @@ function genDiff(string $pathToFile1, string $pathToFile2, string $format = ''):
     return formatDefault($arDiff);
 }
 
+/**
+ * getArrayEntity
+ *
+ * @param  string $pathToFile
+ * @return object
+ */
 function getArrayEntity(string $pathToFile)
 {
+    $data = '';
     $extension = pathinfo($pathToFile, PATHINFO_EXTENSION);
     $fileRawData = (string)\file_get_contents($pathToFile);
     if ($extension == 'json') {
-        return \json_decode($fileRawData);
+        $data = \json_decode($fileRawData);
     }
 
     if ($extension == 'yml' || $extension == 'yaml') {
-        return Yaml::parse($fileRawData, Yaml::PARSE_OBJECT_FOR_MAP);
+        $data = Yaml::parse($fileRawData, Yaml::PARSE_OBJECT_FOR_MAP);
     }
+
+    return (object)$data;
 }
 
-function diff(object $objectFirst, object $objectSecond)
+/**
+ * diff
+ *
+ * @param  object $objectFirst
+ * @param  object $objectSecond
+ * @return array<mixed>
+ */
+function diff(object $objectFirst, object $objectSecond): array
 {
-    $iter = function ($objectFirst, $objectSecond) use (&$iter) {
-
+    $iter = function ($objectFirst, $objectSecond) use (&$iter)
+    {
         $arDiff = [];
         if (\is_object($objectFirst)) {
             foreach ((array)$objectFirst as $keyFirst => $valueFirst) {
@@ -83,7 +107,13 @@ function diff(object $objectFirst, object $objectSecond)
     return $arData;
 }
 
-function formatDefault(array $arDiff)
+/**
+ * formatDefault
+ *
+ * @param  array<mixed> $arDiff
+ * @return string
+ */
+function formatDefault(array $arDiff): string
 {
     $iter = function ($arDiff, $level, $diffParent = false) use (&$iter) {
 
@@ -93,6 +123,8 @@ function formatDefault(array $arDiff)
 
         foreach ($arDiff as $key => $value) {
             $noDiffValue = false;
+            $valueNew = '';
+            $valueOld = '';
 
             $hasOldValue = \array_key_exists('old', $value);
             $hasNewValue = \array_key_exists('new', $value);
@@ -146,15 +178,25 @@ function formatDefault(array $arDiff)
         return $diffString;
     };
 
-    return $iter($arDiff, 1, false);
+    $finalData = $iter($arDiff, 1, false);
+
+    return $finalData;
 }
 
-function formatPlain(array $arDiff)
+/**
+ * formatPlain
+ *
+ * @param  array<mixed> $arDiff
+ * @return string
+ */
+function formatPlain(array $arDiff): string
 {
 
     $iter = function ($arDiff, &$arFormatDiff = [], $level = 1, $currentLevel = '') use (&$iter) {
 
         foreach ($arDiff as $key => $value) {
+            $valueNew = '';
+            $valueOld = '';
             $hasOldValue = \array_key_exists('old', $value);
             $hasNewValue = \array_key_exists('new', $value);
 
@@ -201,22 +243,41 @@ function formatPlain(array $arDiff)
     return implode(PHP_EOL, $arFormatDiff);
 }
 
-function sanitizeValue($value)
+/**
+ * sanitizeValue
+ *
+ * @param  mixed $value
+ * @return mixed
+ */
+function sanitizeValue(mixed $value): mixed
 {
     if (is_object($value)) {
         return (array) $value;
     }
 
-    return \str_replace('"', '', \json_encode($value));
+    $stringValue = strval($value);
+
+    if (in_array(trim($stringValue), ['true', 'false', 'null']) || is_numeric($stringValue)) {
+        return $stringValue;
+    }
+
+    return \str_replace('"', '', (string) \json_encode($stringValue));
 }
 
-function sanitizeValuePlain($value)
+/**
+ * sanitizeValuePlain
+ *
+ * @param  mixed $value
+ * @return string
+ */
+function sanitizeValuePlain(mixed $value): string
 {
     if (is_object($value) || is_array($value)) {
         return '[complex value]';
     }
 
-    $value = \str_replace('"', '', $value);
+    
+    $value = \str_replace('"', '', strval($value));
 
     if (in_array(trim($value), ['true', 'false', 'null']) || is_numeric($value)) {
         return $value;
