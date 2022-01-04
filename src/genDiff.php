@@ -113,7 +113,7 @@ function diff(object $objectFirst, object $objectSecond): array
  * @param  array<mixed> $arDiff
  * @return string
  */
-function formatDefault(array $arDiff): string
+function formatDefault($arDiff): string
 {
     $iter = function ($arDiff, $level, $diffParent = false) use (&$iter) {
 
@@ -246,22 +246,20 @@ function formatPlain(array $arDiff): string
 /**
  * sanitizeValue
  *
- * @param  mixed $value
- * @return mixed
+ * @param  mixed|string $value
+ * @return mixed|null
  */
-function sanitizeValue(mixed $value): mixed
+function sanitizeValue($value)
 {
     if (is_object($value)) {
         return (array) $value;
     }
-
-    $stringValue = strval($value);
-
-    if (in_array(trim($stringValue), ['true', 'false', 'null']) || is_numeric($stringValue)) {
-        return $stringValue;
+    
+    if ($value === null) {
+        return 'null';
     }
 
-    return \str_replace('"', '', (string) \json_encode($stringValue));
+    return trim(var_export($value, true),'\'');
 }
 
 /**
@@ -270,13 +268,12 @@ function sanitizeValue(mixed $value): mixed
  * @param  mixed $value
  * @return string
  */
-function sanitizeValuePlain(mixed $value): string
+function sanitizeValuePlain($value): string
 {
     if (is_object($value) || is_array($value)) {
         return '[complex value]';
     }
 
-    
     $value = \str_replace('"', '', strval($value));
 
     if (in_array(trim($value), ['true', 'false', 'null']) || is_numeric($value)) {
