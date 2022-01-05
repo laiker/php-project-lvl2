@@ -1,7 +1,9 @@
 <?php
 
 namespace Differ\Differ;
+
 use Symfony\Component\Yaml\Yaml;
+
 use function Functional\each;
 
 /**
@@ -61,7 +63,7 @@ function diff(object $objectFirst, object $objectSecond): array
     $iter = function ($objectFirst, $objectSecond) use (&$iter) {
         $arDiff = [];
         if (\is_object($objectFirst)) {
-            $diff1 = each ((array)$objectFirst, function($valueFirst, $keyFirst) use ($objectSecond, $iter, &$arDiff) {
+            $diff1 = each((array)$objectFirst, function ($valueFirst, $keyFirst) use ($objectSecond, $iter, &$arDiff) {
                 if (is_object($valueFirst)) {
                     $secondValue = (is_object($objectSecond) && \property_exists($objectSecond, $keyFirst)) ?
                         $objectSecond->{$keyFirst} : '';
@@ -90,10 +92,11 @@ function diff(object $objectFirst, object $objectSecond): array
 
         if (\is_object($objectSecond)) {
             $objectFirst = is_object($objectFirst) ? $objectFirst : new \stdClass(); /** @phpstan-ignore-line */
-            $diff2 = each ((array)$objectSecond, function($valueSecond, $keySecond) use ($objectFirst, $iter, &$arDiff) {
+            $dif = each((array)$objectSecond, function ($valueSecond, $keySecond) use ($objectFirst, $iter, &$arDiff) {
                 if (!\property_exists($objectFirst, $keySecond)) {
                     if (\is_object($valueSecond)) {
-                        $arDiff[$keySecond]['new'] = $iter($objectFirst->{$keySecond}, $valueSecond); /** @phpstan-ignore-line */
+                        /** @phpstan-ignore-next-line */
+                        $arDiff[$keySecond]['new'] = $iter($objectFirst->{$keySecond}, $valueSecond);
                     } else {
                         $arDiff[$keySecond]['new'] = sanitizeValue($valueSecond); /** @phpstan-ignore-line */
                     }
@@ -105,7 +108,7 @@ function diff(object $objectFirst, object $objectSecond): array
 
         return $arSortedDiff;
     };
-    
+
     $arData = $iter($objectFirst, $objectSecond);
 
     return $arData;
@@ -123,7 +126,7 @@ function formatDefault($arDiff): string
 
         $diffString = '{' . PHP_EOL;
         $arFormatDiff = [];
-        $diffResult = each ($arDiff, function($value, $key) use ($iter, $level, $diffParent, &$arFormatDiff) {
+        $diffResult = each($arDiff, function ($value, $key) use ($iter, $level, $diffParent, &$arFormatDiff) {
 
             $noDiffValue = false;
             $valueNew = '';
@@ -133,13 +136,17 @@ function formatDefault($arDiff): string
             $hasNewValue = \array_key_exists('new', $value);
 
             if ($hasOldValue) {
-                $noDiffValue = \is_array($value['old']) && (!$hasNewValue || !\is_array($value['new'])); /** @phpstan-ignore-line */
-                $valueOld = \is_array($value['old']) ? $iter($value['old'], $level + 2, $noDiffValue) : $value['old']; /** @phpstan-ignore-line */
+                /** @phpstan-ignore-next-line */
+                $noDiffValue = \is_array($value['old']) && (!$hasNewValue || !\is_array($value['new']));
+                /** @phpstan-ignore-next-line */
+                $valueOld = \is_array($value['old']) ? $iter($value['old'], $level + 2, $noDiffValue) : $value['old'];
             }
 
             if ($hasNewValue) {
-                $noDiffValue = (!$hasOldValue || !\is_array($value['old'])) && \is_array($value['new']); /** @phpstan-ignore-line */
-                $valueNew = \is_array($value['new']) ? $iter($value['new'], $level + 2, $noDiffValue) : $value['new']; /** @phpstan-ignore-line */
+                /** @phpstan-ignore-next-line */
+                $noDiffValue = (!$hasOldValue || !\is_array($value['old'])) && \is_array($value['new']);
+                /** @phpstan-ignore-next-line */
+                $valueNew = \is_array($value['new']) ? $iter($value['new'], $level + 2, $noDiffValue) : $value['new'];
             }
 
             if ($diffParent) {
@@ -150,21 +157,26 @@ function formatDefault($arDiff): string
 
             if ($hasOldValue && $hasNewValue) {
                 if ($valueOld != $valueNew) {
-                    $arFormatDiff[] = str_repeat('  ', $level) .  $diff . ' ' . $key . ': ' . $valueOld; /** @phpstan-ignore-line */
-                    $arFormatDiff[] = str_repeat('  ', $level) .  '+' . ' ' . $key . ': ' . $valueNew; /** @phpstan-ignore-line */
+                    /** @phpstan-ignore-next-line */
+                    $arFormatDiff[] = str_repeat('  ', $level) .  $diff . ' ' . $key . ': ' . $valueOld;
+                    /** @phpstan-ignore-next-line */
+                    $arFormatDiff[] = str_repeat('  ', $level) .  '+' . ' ' . $key . ': ' . $valueNew;
                 } else {
-                    $arFormatDiff[] = str_repeat('  ', $level) .  ' ' . ' ' . $key . ': ' . $valueNew; /** @phpstan-ignore-line */
+                    /** @phpstan-ignore-next-line */
+                    $arFormatDiff[] = str_repeat('  ', $level) .  ' ' . ' ' . $key . ': ' . $valueNew;
                 }
             } else {
                 if ($hasOldValue) {
-                    $arFormatDiff[] = str_repeat('  ', $level) .  $diff . ' ' . $key . ': ' . $valueOld; /** @phpstan-ignore-line */
+                    /** @phpstan-ignore-next-line */
+                    $arFormatDiff[] = str_repeat('  ', $level) .  $diff . ' ' . $key . ': ' . $valueOld;
                 } else {
                     if ($diffParent) {
                         $diffPositive = ' ';
                     } else {
                         $diffPositive = '+';
                     }
-                    $arFormatDiff[] = str_repeat('  ', $level) .  $diffPositive . ' ' . $key . ': ' . $valueNew; /** @phpstan-ignore-line */
+                    /** @phpstan-ignore-next-line */
+                    $arFormatDiff[] = str_repeat('  ', $level) .  $diffPositive . ' ' . $key . ': ' . $valueNew;
                 }
             }
         });
@@ -195,7 +207,7 @@ function formatPlain(array $arDiff): string
 
     $iter = function ($arDiff, &$arFormatDiff = [], $level = 1, $currentLevel = '') use (&$iter) {
 
-        $diffResult = each ($arDiff, function($value, $key) use ($iter, $currentLevel, $level, &$arFormatDiff) {
+        $diffResult = each($arDiff, function ($value, $key) use ($iter, $currentLevel, $level, &$arFormatDiff) {
 
             $valueNew = '';
             $valueOld = '';
@@ -206,30 +218,36 @@ function formatPlain(array $arDiff): string
 
             if ($hasOldValue) {
                 if (\is_array($value['old']) && $hasNewValue && \is_array($value['new'])) {
-                    $valueOld = $iter($value['old'], $arFormatDiff, $level + 1, $tempLevel); /** @phpstan-ignore-line */
+                    /** @phpstan-ignore-next-line */
+                    $valueOld = $iter($value['old'], $arFormatDiff, $level + 1, $tempLevel);
                 } else {
-                    $valueOld = isset($value['old']) ? sanitizeValuePlain($value['old']) : ''; /** @phpstan-ignore-line */
+                    /** @phpstan-ignore-next-line */
+                    $valueOld = sanitizeValuePlain($value['old']);
                 }
             }
 
             if ($hasNewValue) {
                 if (\is_array($value['new']) && $hasOldValue && \is_array($value['old'])) {
-                    $valueNew = $iter($value['new'], $arFormatDiff, $level + 1, $tempLevel); /** @phpstan-ignore-line */
+                    /** @phpstan-ignore-next-line */
+                    $valueNew = $iter($value['new'], $arFormatDiff, $level + 1, $tempLevel);
                 } else {
-                    $valueNew = isset($value['new']) ? sanitizeValuePlain($value['new']) : ''; /** @phpstan-ignore-line */
+                     /** @phpstan-ignore-next-line */
+                     $valueNew = sanitizeValuePlain($value['new']);
                 }
             }
 
             $formatString = '';
             if ($hasOldValue && $hasNewValue) {
                 if ($valueOld != $valueNew) {
-                    $formatString = "Property '" . $tempLevel . "' was updated. From " . $valueOld . " to " . $valueNew; /** @phpstan-ignore-line */
+                    /** @phpstan-ignore-next-line */
+                    $formatString = "Property '" . $tempLevel . "' was updated. From " . $valueOld . " to " . $valueNew;
                 }
             } else {
                 if (isset($value['old'])) {
                     $formatString = "Property '" . $tempLevel . "' was removed"; /** @phpstan-ignore-line */
                 } else {
-                    $formatString = "Property '" . $tempLevel . "' was added with value: " . $valueNew; /** @phpstan-ignore-line */
+                    /** @phpstan-ignore-next-line */
+                    $formatString = "Property '" . $tempLevel . "' was added with value: " . $valueNew;
                 }
             }
 
@@ -276,7 +294,7 @@ function sanitizeValuePlain($value): string
         return '[complex value]';
     }
 
-    $value = \str_replace('"', '', strval($value)); /** @phpstan-ignore-line */
+    $value = trim(var_export($value, true), '\''); /** @phpstan-ignore-line */
 
     if (in_array(trim($value), ['true', 'false', 'null'], true) || is_numeric($value)) {
         return $value;
