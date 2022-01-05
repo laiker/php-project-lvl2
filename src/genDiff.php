@@ -96,7 +96,7 @@ function diff(object $objectFirst, object $objectSecond): array
                 if (!\property_exists($objectFirst, $keySecond)) {
                     if (\is_object($valueSecond)) {
                         /** @phpstan-ignore-next-line */
-                        $arDiff[$keySecond]['new'] = $iter($objectFirst->{$keySecond}, $valueSecond);
+                        $arDiff[$keySecond]['new'] = $iter($objectSecond->{$keySecond}, $valueSecond);
                     } else {
                         $arDiff[$keySecond]['new'] = sanitizeValue($valueSecond); /** @phpstan-ignore-line */
                     }
