@@ -92,8 +92,8 @@ function diff(object $objectFirst, object $objectSecond): array
 
         if (\is_object($objectSecond)) {
             $objectFirst = is_object($objectFirst) ? $objectFirst : new \stdClass(); /** @phpstan-ignore-line */
-            $dif = each((array)$objectSecond, function ($valueSecond, $keySecond) 
-            use ($objectFirst, $iter, &$arDiff, $objectSecond) {
+            $dif = each((array)$objectSecond, function ($valueSecond, $keySecond)
+ use ($objectFirst, $iter, &$arDiff, $objectSecond) {
                 if (!\property_exists($objectFirst, $keySecond)) {
                     if (\is_object($valueSecond)) {
                         /** @phpstan-ignore-next-line */
