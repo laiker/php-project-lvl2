@@ -3,7 +3,6 @@
 namespace Differ\Differ;
 use Symfony\Component\Yaml\Yaml;
 use function Functional\each;
-use function Functional\map;
 
 /**
  * genDiff
@@ -63,7 +62,6 @@ function diff(object $objectFirst, object $objectSecond): array
         $arDiff = [];
         if (\is_object($objectFirst)) {
             $diff1 = each ((array)$objectFirst, function($valueFirst, $keyFirst) use ($objectSecond, $iter, &$arDiff) {
-                $differ = [];
                 if (is_object($valueFirst)) {
                     $secondValue = (is_object($objectSecond) && \property_exists($objectSecond, $keyFirst)) ?
                         $objectSecond->{$keyFirst} : '';
