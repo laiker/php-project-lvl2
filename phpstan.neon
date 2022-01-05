@@ -1,0 +1,15 @@
+parameters:
+    checkMissingIterableValueType: false
+    level: max
+    paths:
+        - src
+
+    ignoreErrors:
+    - '#Variable property access on object#'
+    
+    phpstanFunctionalProgramming:
+        disallowThrow: false
+
+includes:
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/hexlet/phpstan-fp/extension.neon
